@@ -4,11 +4,17 @@ import examptit.test.Model.Student;
 import examptit.test.Model.Teacher;
 import examptit.test.Model.Exam;
 import examptit.test.Model.Question;
+import examptit.test.Model.StudentAnswer;
+import examptit.test.Model.Result;
+import examptit.test.Model.User;
 
 import examptit.test.Repository.ExamRepo;
 import examptit.test.Repository.QuestionRepo;
+import examptit.test.Repository.ResultRepo;
 import examptit.test.Repository.StudentRepo;
 import examptit.test.Repository.TeacherRepo;
+import examptit.test.Repository.UserRepo;
+import examptit.test.Repository.StudentAnswerRepo;
 
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +27,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 public class GetInfomationController {
-
+    @Autowired
+    private UserRepo userRepo;
     @Autowired
     private StudentRepo studentRepo;
     @Autowired
@@ -30,7 +37,16 @@ public class GetInfomationController {
     private ExamRepo examRepo;
     @Autowired
     private QuestionRepo questionRepo;
+    @Autowired
+    private StudentAnswerRepo studentAnswerRepo;
+    @Autowired
+    private ResultRepo resultRepo;
 
+    // get all user
+    @GetMapping("get/user")
+    public List<User> getUser() {
+        return userRepo.findAll();
+    }
     // get all student
     @GetMapping("get/student")
     public List<Student> getStudent() {
@@ -53,4 +69,17 @@ public class GetInfomationController {
     public List<Question> getQuestionByIdExam(@PathVariable String id) {
         return questionRepo.findByIdExam(id);
     }
+
+    // get anser by exam and student
+    @GetMapping("get/answer/{idExam}/{idStudent}")
+    public List<StudentAnswer> getAnswerByExamAndStudent(@PathVariable String idExam, @PathVariable String idStudent) {
+        return studentAnswerRepo.findByIdExamAndIdStudent(idExam, idStudent);
+    }
+
+    // get result by exam and student
+    @GetMapping("get/result/{idExam}/{idStudent}")
+    public Result getResultByExamAndStudent(@PathVariable String idExam, @PathVariable String idStudent) {
+        return resultRepo.findByIdExamAndIdStudent(idExam, idStudent);
+    }
+    
 }
